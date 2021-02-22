@@ -7,7 +7,7 @@ const SuratMasukSchema = new Schema({
     tanggalKirim: {type: Date},
     tanggalTerima: {type: Date},
     noSurat: {type: Number},
-    pengirim: {type: Schema.Types.ObjectId, ref: "Auth"},
+    pengirim: {type: Schema.Types.ObjectId, ref: "Petugas"},
     perihal: {type: String}
 })
 

@@ -33,7 +33,7 @@ class Register extends Component {
                 username: this.state.username,
                 password: this.state.password,
             }
-            axios.post('/auth/register', data)
+            axios.post('/petugas/register', data)
                 .then(() => window.location.href = '/Howry/Archive' )
         }
     }

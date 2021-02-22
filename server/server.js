@@ -5,7 +5,7 @@ const passport = require('passport');
 const localstrat = require('passport-local').Strategy
 const mongoose = require('mongoose')
 
-const Auth = require('./models/Auth')
+const Petugas = require('./models/Petugas')
 // initialize
 const PORT = 4000
 const app = express()
@@ -20,7 +20,7 @@ mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopology: true})
 app.use(express.json())
 app.use(session({secret:'cats', resave: false, saveUninitialized: true}))
 passport.use(new localstrat((username, password, done) => {
-    Auth.findOne({ username: username }, (err, user) => {
+    Petugas.findOne({ username: username }, (err, user) => {
         if(err) {
             return done(err);
         }
@@ -37,7 +37,7 @@ passport.serializeUser((user, done) =>{
     done(null, user.id)
 })
 passport.deserializeUser((id, done) =>{
-    Auth.findById(id, (err, user) =>{
+    Petugas.findById(id, (err, user) =>{
         done(err, user)
     })
 })
@@ -47,6 +47,5 @@ app.use(express.urlencoded({ extended:false }))
 
 // routes
 
-app.use('/auth', require('./routers/auth'))
-app.use('/message', require('./routers/message'))
+app.use('/petugas', require('./routers/petugas'))
 app.use('/suratmasuk', require('./routers/suratmasuk'))
