@@ -16,7 +16,7 @@ class Home extends Component {
                     <br/><br/><br/><br/>
                     <h1 className='display-4' style={{fontWeight: 'bold'}}>An Archive System</h1>
                     <br/>
-                    <h5 style={{wordSpacing: '8px'}} className='text-left'><span style={{fontSize: '28px'}}><b><i>for ghost</i></b></span>. i dont wanna waste my time if i can't be by your side<span style={{fontSize: '8px'}}> then hmu lol, im joking. unless...</span> </h5>
+                    <h5 style={{wordSpacing: '8px'}} className='text-left'><span style={{fontSize: '28px'}}><b><i>by Raihan</i></b></span>. i dont wanna waste my time if i can't be by your side </h5>
                     <br/>
                     <Link to='/Howry/Archive'>
                         <Button variant='outline-dark'>See all Archives</Button>

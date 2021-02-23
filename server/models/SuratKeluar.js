@@ -6,9 +6,10 @@ const SuratKeluarSchema = new Schema({
     jenisSurat: {type: String},
     tanggalKirim: {type: Date},
     noSurat: {type: Number},
-    pengirim: [{type: Schema.Types.ObjectId, ref: "Petugas"}],
+    pengirim: {type: Schema.Types.ObjectId, ref: "Petugas"},
     perihal: {type: String}
 })
 
 const SuratKeluar = mongoose.model('SuratKeluar', SuratKeluarSchema)
-module.export = SuratKeluar
+module.exports = SuratKeluar
+

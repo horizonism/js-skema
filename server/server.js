@@ -49,3 +49,5 @@ app.use(express.urlencoded({ extended:false }))
 
 app.use('/petugas', require('./routers/petugas'))
 app.use('/suratmasuk', require('./routers/suratmasuk'))
+app.use('/suratkeluar', require('./routers/suratkeluar'))
+app.use('/disposisi', require('./routers/disposisi'))

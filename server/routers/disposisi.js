@@ -1,36 +1,35 @@
 const express = require('express');
 const router = express.Router();
 
-const SuratMasuk = require('../models/SuratMasuk')
+const Disposisi = require('../models/Disposisi')
 
 router.get('/', (req, res, next) => {
-    SuratMasuk.find()
-        .populate("pengirim")
+    Disposisi.find()
+        .populate("noSurat")
         .then((response) => res.json(response))
 })
 router.get('/:id', (req, res, next) => {
-    SuratMasuk.findById(req.params.id)
+    Disposisi.findById(req.params.id)
         .then((response) => res.json(response))
 })
 router.get('/search/:search', (req, res, next) => {
-    SuratMasuk.find({noSurat: req.params.search})
+    Disposisi.find({noSurat: req.params.search})
         .populate("pengirim")
         .then((response) => res.json(response))
 })
 router.post('/new', (req, res, next) => {
-    SuratMasuk.create(req.body)
+    console.log(req.body)
+    Disposisi.create(req.body)
         .then(() => console.log('created'))
         res.send('created bro')
-        next()
 })
 router.put('/update/:id', (req, res, next) => {
-    console.log(req.params.id)
     console.log(req.body)
-    SuratMasuk.findByIdAndUpdate(req.params.id, req.body)
+    Disposisi.findByIdAndUpdate(req.params.id, req.body)
         .then(() => res.send('updated'))
 })
 router.delete('/delete/:id', (req, res, next) => {
-    SuratMasuk.findByIdAndDelete(req.params.id)
+    Disposisi.findByIdAndDelete(req.params.id)
         .then(() => console.log('deleted'))
 })
 

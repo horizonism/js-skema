@@ -14,21 +14,17 @@ class SuratMasuk extends Component {
             tanggalTerima: '',
             noSurat: '',
             perihal: '',
-            username: '',
-            password: '',
-            message: '',
-            isLoggedIn: false,
-            user: {},
-            userMsg: [],
-            search: '',
+            id: ''
         }
     }
 
     async componentDidMount(){
         let url = '/suratmasuk/' + this.props.location.pathname.slice(23)
+        let id = this.props.location.pathname.slice(23)
         await axios.get('/petugas')
             .then((res) => { this.setState({
-                user: res.data
+                user: res.data,
+                id: id
             })
         })
         console.log(url)
@@ -64,7 +60,7 @@ class SuratMasuk extends Component {
             pengirim: this.state.user._id,
             perihal: this.state.perihal,
         }
-        axios.post('/suratmasuk/new', data)
+        axios.put(`/suratmasuk/update/${this.state.id}`, data)
             .then(() => window.location.href = '/Howry/Archive' )
     }
 

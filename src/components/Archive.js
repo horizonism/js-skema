@@ -18,12 +18,14 @@ class Archive extends Component {
             archive: '',
             isLoggedIn: false,
             user: {},
-            userMsg: [],
+            suratM: [],
+            suratK: [],
             search: '',
         }
     }
 
     async componentDidMount(){
+        console.log(this.props.location.pathname)
         await axios.get('/petugas')
             .then((res) => { this.setState({
                 user: res.data
@@ -42,6 +44,7 @@ class Archive extends Component {
     }
 
     login = (e) => {
+        e.preventDefault()
         let data = {
             username: this.state.username,
             password: this.state.password
@@ -58,6 +61,7 @@ class Archive extends Component {
                     this.checkUser()
                 })
             })
+            window.location.href = '/Howry/archive'
     }
 
     handleChange = (e) => {
@@ -86,8 +90,15 @@ class Archive extends Component {
         await axios.get(`/suratmasuk`)
             .then((res) => {
                 this.setState({
-                userMsg: res.data
+                suratM: res.data
             })})
+        await axios.get(`/suratkeluar`)
+            .then((res) => {
+                this.setState({
+                suratK: res.data
+        })})
+            console.log(this.state.suratM)
+            console.log(this.state.suratK)
     }
 
     logout = () => {
@@ -95,27 +106,43 @@ class Archive extends Component {
             .then(() => this.setState({ user: [], isLoggedIn: false }))
     }
 
-    // handleSearch = (e) => {
-    //     e.preventDefault()
-    //     if(this.state.search){
-    //         axios.get(`/archive/search/${this.state.search}`)
-    //             .then((res) => this.setState({
-    //                 userMsg: res.data
-    //             }))
-    //     }else{
-    //         this.getArchives()
-    //     }
-    // }
+    handleSearch = (e) => {
+        e.preventDefault()
+        if(this.state.search){
+            axios.get(`/suratmasuk/search/${this.state.search}`)
+                .then((res) => this.setState({
+                    suratM: res.data
+                }))
+        }else{
+            this.getArchives()
+        }
+    }
 
     handleDelete = (id) => {
         axios.delete(`/suratmasuk/delete/${id}`)
         this.getArchives()
     }
 
+    handleDelete2 = (id) => {
+        axios.delete(`/suratkeluar/delete/${id}`)
+        this.getArchives()
+    }
+
     render() {
         let url = `smupdate/update/`
-        let archive = this.state.userMsg.map(item => <li key={item._id}>
-            No Agenda {item.noAgenda} dengan Perihal {item.perihal} dikirim oleh {item.pengirim.namaDepan} <Link to={url + item._id}><Button>edit</Button></Link><Button onClick={() => this.handleDelete(item._id)} variant="danger">delete</Button>
+        let url2 = `disposisi/`
+        let url3 = `skupdate/update/`
+        let masukAdmin = this.state.suratM.map(item => <li style={{listStyle:'none'}} key={item._id}>
+            <h3>Surat Masuk</h3>No Agenda : {item.noAgenda}<br/>No Surat : {item.noSurat} <br/> Tanggal : {item.tanggalKirim } - {item.tanggalTerima} <br/> Perihal : {item.perihal} <br/> Pengirim : {item.pengirim.namaDepan} {item.pengirim.namaBelakang} <br/> <br/> <Link to={url + item._id}><Button className="mr-2">edit</Button></Link><Button onClick={() => this.handleDelete(item._id)} className="mr-2" variant="danger">delete</Button><Link to={url2 + item._id}><Button variant="success" className="mr-2">disp</Button></Link> <br/><br/>
+        </li>);
+        let keluarAdmin = this.state.suratK.map(item => <li style={{listStyle:'none'}} key={item._id}>
+            <h3>Surat Keluar</h3>No Agenda : {item.noAgenda}<br/>No Surat : {item.noSurat} <br/> Tanggal Kirim : {item.tanggalKirim }  <br/> Perihal : {item.perihal} <br/> Pengirim : {item.pengirim.namaDepan} {item.pengirim.namaBelakang} <br/> <br/> <Link to={url3 + item._id}><Button className="mr-2">edit</Button></Link><Button onClick={() => this.handleDelete2(item._id)} className="mr-2" variant="danger">delete</Button>
+        </li>);
+        let masukUser = this.state.suratM.map(item => <li style={{listStyle:'none'}} key={item._id}>
+            <h3>Surat Masuk</h3>No Agenda : {item.noAgenda}<br/>No Surat : {item.noSurat} <br/> Tanggal : {item.tanggalKirim } - {item.tanggalTerima} <br/> Perihal : {item.perihal} <br/> Pengirim : {item.pengirim.namaDepan} {item.pengirim.namaBelakang} <br/><br/>
+        </li>);
+        let keluarUser = this.state.suratK.map(item => <li style={{listStyle:'none'}} key={item._id}>
+            <h3>Surat Keluar</h3>No Agenda : {item.noAgenda}<br/>No Surat : {item.noSurat} <br/> Tanggal Kirim : {item.tanggalKirim } <br/> Perihal : {item.perihal} <br/> Pengirim : {item.pengirim.namaDepan} {item.pengirim.namaBelakang} <br/><br/>
         </li>);
         if(!this.state.isLoggedIn){
             return(
@@ -156,7 +183,42 @@ class Archive extends Component {
                     </Container>
                 </div>
             )
-        }else{
+        }else if(this.state.user.hak === 'admin'){
+            return(
+                <div>
+                    <Container>
+                            <Col className="m-5">
+                                <h1>Hello, {this.state.user.namaDepan} {this.state.user.namaBelakang}</h1>
+                                <a href='#' onClick={this.logout}>Log out</a>
+                                <br/><br/>
+                            <Link to='/Howry/suratmasuk'>
+                                <Nav.Link>Tambah Surat Masuk</Nav.Link>
+                            </Link>
+                            <Link to='/Howry/suratkeluar'>
+                                <Nav.Link>Tambah Surat Keluar</Nav.Link>
+                            </Link>
+                            <h3>All archives from users : </h3>
+                            <Form onSubmit={this.handleSearch}>
+                                <Form.Group className="mb-2" controlId="archive">
+                                    <Row>
+                                        <Col>
+                                        <Form.Control type="name" name="search" placeholder="Search Archive Number" onChange={this.handleChange}/>
+                                        </Col>
+                                        <Col>
+                                        <Button variant="dark" type="submit">Search</Button>
+                                        </Col>
+                                    </Row>
+                                </Form.Group>
+                            </Form>
+                            <br/>
+                            {masukAdmin}
+                            {keluarAdmin}
+                            </Col>
+                            <hr style={{marginBottom: 150}}/>
+                    </Container>
+                </div>
+            )
+        }else if(this.state.user.hak === 'user'){
             return(
                 <div>
                     <Container>
@@ -164,9 +226,6 @@ class Archive extends Component {
                                 <h1>Hello, {this.state.user.namaDepan} {this.state.user.namaBelakang}</h1>
                                 <a href='#home' onClick={this.logout}>Log out</a>
                                 <br/><br/>
-                            <Link to='/Howry/suratmasuk'>
-                                <Nav.Link>Tambah Surat Masuk</Nav.Link>
-                            </Link>
                             <h3>All archives from users : </h3>
                             <Form onSubmit={this.handleSearch}>
                                 <Form.Group className="mb-2" controlId="archive">
@@ -180,7 +239,8 @@ class Archive extends Component {
                                     </Row>
                                 </Form.Group>
                             </Form>
-                            {archive}
+                            {masukUser}
+                            {keluarUser}
                             </Col>
                             <hr style={{marginBottom: 150}}/>
                     </Container>

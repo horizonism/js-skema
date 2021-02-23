@@ -1,15 +1,15 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-let DisposisiSchema = new Schema({
-    noDisposal: {type: Number},
+const DisposisiSchema = new Schema({
+    noDisposisi: {type: Number},
     noAgenda: {type: Number},
-    noSurat: {type: Number},
+    noSurat: {type: Schema.Types.ObjectId, ref: "SuratMasuk"},
     kepada: {type: String},
     keterangan: {type: String},
-    statusSurat: {type: String},
+    statusSurat: {type: String, default: "Normal"},
     tanggapan: {type: String},
 })
 
-let Disposisi = mongoose.model('Disposisi', DisposisiSchema)
-module.export = Disposisi
+const Disposisi = mongoose.model('Disposisi', DisposisiSchema)
+module.exports = Disposisi

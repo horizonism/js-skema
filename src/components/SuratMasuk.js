@@ -31,14 +31,16 @@ class SuratMasuk extends Component {
             })
         })
         axios.get(url)
-            .then((res) => this.setState({
+            .then((res) => 
+            this.setState({
                 noAgenda: res.data.noAgenda,
                 jenisSurat: res.data.jenisSurat,
                 tanggalKirim: res.data.tanggalKirim,
                 tanggalTerima: res.data.tanggalTerima,
                 noSurat: res.data.noSurat,
                 perihal: res.data.perihal,
-            }))
+            })
+            )
     }
 
     handleChange = (e) => {

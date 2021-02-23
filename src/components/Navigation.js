@@ -10,7 +10,7 @@ class Navigation extends Component {
             <Navbar bg="light" expand='md' fixed='bottom'>
             <Navbar.Brand>
               <img src={logo} width="50" alt="logo"/>
-              <span>Horizonism &copy;</span>
+              <span style={{fontWeight: 'bold'}}>Horizonism &copy;</span>
               </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbar"/>
     
